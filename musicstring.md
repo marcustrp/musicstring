@@ -1,37 +1,48 @@
-# musicstring
+# MusicString
 
 ## 1. About
 
-Single line music notation based in part on ABC notation. Originally made to quickly create music theory exercises.
+Single line music notation with some inspiration from ABC notation. Originally made to quickly create music theory exercises and quickly writing down melodies on-the-go.
+
+This repo is only a specification of the MusicString syntax. For an implementation, see MusiCore.
 
 ### Version
 
-This is the alpha 3 work-in-progress version of the specification. **Breaking changes may - or rather will - occur.**
+This is the 0.1.0 work-in-progress version of the specification. **Breaking changes may - or rather WILL - occur.**
 
 ### Overview
 
 Allows for quick creation of short music examples in a single line of plain ASCII.
 
-*Example 1: Rhythm without pitch*
+#### Example 1: Rhythm without pitch
 
+`M2 x_xx xx xx_x xx.`
 (todo: picture)
-M2 x_xx xx xx_x xx.
 
-*Example 2: Rhythm without pitch, triplets*
+#### Example 2: Rhythm without pitch, triplets
 
+`xx 3:xxx 3::4:x_x_xx 3::2 xx_`
 (todo: picture)
-xx 3:xxx 3::4:x_x_xx 3::2 xx_
 
-*Example 3: Simple melody*
+#### Example 3: Simple melody in C major
 
+`1 5 33 1 22 -55 8`
 (todo: picture)
-KGMC 5+1 -7_67 +1 2.3 4_32 3
+
+#### Example 4: Melody in G and 3/4
+
+`@KGM3 5+1 -7_67 +1 2.3 4_32 3 -6.7 +13 21 -7.6 5#4 5`
+(todo: picture)
 
 ## 2. Specification
 
 ````regexp
-[Information] [Modifiers] [Group]
+[Extensions] [Information] [Modifiers] [Group]
 ````
+
+### Extensions
+
+Extension fields are prefixed with and & symbol. Can be used for adding extra information, for example for defining exercise settings (see MusicStringX).
 
 ### Information fields
 
@@ -41,7 +52,7 @@ Fields marked "header only" may only be defined at the start of musicstring.
 
 #### Book 'B' (header only)
 
-B`[book]`
+``B`[book]` ``
 
 Book must be enclosed with backticks. May be used multiple times to add more books.
 
@@ -58,24 +69,26 @@ Optional number is clef line (counting from below) or (perc and none), number of
 By adding +8, -8, +15 or -15, octave clefs are supported. For example, Cg-8 adds an 8 below treble staff.
 @todo is octave clefs taken into account for note input or not?
 
-- g treble, same as g2 (default clef)
-- f bass, same as f4
-- t tenor, same as c4
-- a alto, same as c3
-- m mezzosoprano, same as c2
-- s soprano, same as, c1
-- p percussion (p0 = no lines, p1 one line and so one)
-- n none (number work as for percussion)
+| Token | Clef | Notes |
+| ----- | ----------- | ----- |
+| `f` | bass | same as f4 |
+| `g` | treble | same as g2 (default clef) |
+| `t` | tenor | same as c4 |
+| `a` | alto | same as c3 |
+| `m` | mezzosoprano | same as c2 |
+| `s` | soprano | same as, c1 |
+| `p` | percussion | (p0 = no lines, p1 one line and so one) |
+| `n` | none | number work as for percussion |
 
 #### Discography 'D' (header only)
 
-D`[discography]`
+``D`[discography]` ``
 
 Discography must be enclosed with backticks. May be used multiple times to add more items.
 
 #### Composer 'E' (header only)
 
-E`[composer]`
+``E`[composer]` ``
 
 Composer must be enclosed with backticks. May be used multiple times to add more creators.
 
@@ -91,18 +104,20 @@ Set scale used for note numbers in body (two letter code). Default depends on ke
 
 Numbers in examples below shows what using 1234567 (se **Body**) is in selected input scale.
 
-- ma major, 1 2 3 4 5 6 7
-- mi minor, 1 2 b3 4 5 b6 b7
-- hm harmonic minor 1 2 b3 4 5 b6 7
-- mm melodic minor 1 2 b3 4 5 6 7
-
-- io ionian (same as major)
-- do dorian 1 2 b3 4 5 6 b7
-- ph phrygian 1 b2 b3 4 5 b6 b7
-- ly lydian 1 2 3 #4 5 6 7
-- mx mixolydian 1 2 3 4 5 6 b7
-- ae aeolian (same as minor)
-- lo locian 1 b2 b3 4 b5 b6 b7
+| Token | Mode | Scale steps |
+| ----- | ----------- | ----- |
+| `ma` | major | 1 2 3 4 5 6 7 |
+| `mi` | minor | 1 2 b3 4 5 b6 b7 |
+| `hm` | harmonic minor | 1 2 b3 4 5 b6 7 |
+| `mm` | melodic minor | 1 2 b3 4 5 6 7 |
+| ----- | ----------- | ----- |
+| `io` | ionian | *same as major* |
+| `do` | dorian | 1 2 b3 4 5 6 b7 |
+| `ph` | phrygian | 1 b2 b3 4 5 b6 b7 |
+| `ly` | lydian | 1 2 3 #4 5 6 7 |
+| `mx` | mixolydian | 1 2 3 4 5 6 b7 |
+| `ae` | aeolian | *same as minor* |
+| `lo` | locian | 1 b2 b3 4 b5 b6 b7 |
 
 #### Key 'K'
 
@@ -110,17 +125,19 @@ Numbers in examples below shows what using 1234567 (se **Body**) is in selected 
 K[root][mode][inputscale]
 ````
 
+@todo Cleanup, remove prior versions if new is stable.
+
 Set key. Default key is C major.
 
 ##### Key: Prior version
 
 Set key. Default key i C major. Setting the key will also set *input scale*.
 
-#### Root and major/minor
+##### Root and major/minor
 
 Root note (a-g or A-G) with optional sign (b or #). Uppercase A-G is major and lowercase a-g is minor. For no key, use 'n'. When using no key, notes are related to c.
 
-##### Root: Prior version
+###### Root: Prior version
 
 Root note (a-g,  A-G or n) with optional sign (b or #). If mode is omitted, uppercase A-G is major and lowercase a-g is minor.
 
@@ -136,27 +153,29 @@ Root note (a-g,  A-G or n) with optional sign (b or #). If mode is omitted, uppe
 - input scale
   - affects import of musicstring, but nothing else
 
-#### Mode (should this be scale?)
+##### Mode (should this be scale?)
 
-One letter code for mode. Major or minor mode is set by using lower- or uppercase letter for root
+One letter code for mode. If no mode is defined, mode is set to major or minor (aeolian) using lower- or uppercase letter for root.
 
-- h harmonic (requires root to be lower case, otherwise ignored)
-- m melodic (requires root to be lower case, otherwise ignored)
+| Token | Scale | Notes |
+| ----- | ----------- | ----- |
+| `h` | harmonic | (requires root to be lower case, otherwise ignored) |
+| `m` | melodic | (requires root to be lower case, otherwise ignored) |
+| ----- | ----------- | ----- |
+| `i` | ionian | (same as major) |
+| `d` | dorian | (input scale: dorian) |
+| `y` | phrygian | (input scale: phrygian) |
+| `l` | lydian | (input scale: lydian) |
+| `x` | mixolydian | (input scale: mixolydian) |
+| `a` | aeolian | (same as minor) |
+| `c` | locrian | (input scale: locrian) |
+| ----- | ----------- | ----- |
+| `p` | pentatonic | (input scale: major) |
+| `b` | blues | (input scale: minor) |
+| ----- | ----------- | ----- |
+| `?` | no mode change | use major/minor as defined by root |
 
-- i ionian (same as major)
-- d dorian (input scale: dorian)
-- y phrygian (input scale: phrygian)
-- l lydian (input scale: lydian)
-- x mixolydian (input scale: mixolydian)
-- a aeolian (same as minor)
-- c locrian (input scale: locrian)
-
-- p pentatonic (input scale: major)
-- b blues (input scale: minor)
-
-- ? no mode change, use major/minor as defined by root
-
-##### Mode: Prior version
+###### Mode: Prior version
 
 Two letter pair for mode. Some modes set different key and scale. Also see **input scale** Available modes are:
 
@@ -180,34 +199,35 @@ Two letter pair for mode. Some modes set different key and scale. Also see **inp
 
 - no no key (input scale: major)
 
-#### Input scale
+##### Input scale
 
 Set scale used for note numbers in body (two letter code). The default is major for all keys and modes, but it can be overridden by using one of these one letter codes.
 
 Numbers in examples below shows what using 1234567 (se **Body**) is in selected input scale.
 
-- h harmonic minor 1 2 b3 4 5 b6 7
-- l melodic minor 1 2 b3 4 5 6 7
-
-- i ionian (same as major)
-- d dorian 1 2 b3 4 5 6 b7
-- p phrygian 1 b2 b3 4 5 b6 b7
-- l lydian 1 2 3 #4 5 6 7
-- x mixolydian 1 2 3 4 5 6 b7
-- a aeolian (same as minor)
-- c locrian 1 b2 b3 4 b5 b6 b7
+| Token | Scale | Scale steps |
+| ----- | ----------- | ----- |
+| `h` | harmonic | minor 1 2 b3 4 5 b6 7 |
+| `l` | melodic | minor 1 2 b3 4 5 6 7 |
+| `i` | ionian | (same as major) |
+| `d` | dorian | 1 2 b3 4 5 6 b7 |
+| `p` | phrygian | 1 b2 b3 4 5 b6 b7 |
+| `l` | lydian | 1 2 3 #4 5 6 7 |
+| `x` | mixolydian | 1 2 3 4 5 6 b7 |
+| `a` | aeolian | (same as minor) |
+| `c` | locrian | 1 b2 b3 4 b5 b6 b7 |
 
 #### Meter 'M'
 
 ````regexp
-...
+M[Symbol|Numeric]
 ````
 
 Default meter is 4/4.
 
 ##### Symbols
 
-Supported symbols are Mc (common time) and Mt (cut time)
+Supported symbols are 'c' (common time) and 't' (cut time).
 
 ##### Numeric
 
@@ -221,9 +241,9 @@ Two digits is short for x/y, so M28 is M2/8.
 
 #### Notes 'N' (header only)
 
-N`[notes]`
+``N`[notes]` ``
 
-Notes (comment) must be enclosed with backticks.
+Notes (comments) must be enclosed with backticks. New lines should be replaced with \n.
 
 #### Octave 'O'
 
@@ -231,112 +251,131 @@ Notes (comment) must be enclosed with backticks.
 O[0-9]
 ````
 
+@todo Define default octave for different clefs.
+
 Sets the current octave
 
 #### Origin 'o' (header only)
 
-o`[origin]`
+``o`[origin]` ``
 
 Must be enclosed with backticks.
 
 #### Tempo 'Q'
 
-Q`[Tempo]`
+``Q`[Tempo]` ``
 
 @todo Define syntax for tempo (`Allegro`, q=120, 'rit'...)
 
 #### Type 'R'
 
-R`[Type]`
+``R`[Type]` ``
 
 Must be enclosed with backticks. Reel, waltz...
 
 #### Source 'S'
 
-Q`[Source]`
+``Q`[Source]` ``
 
 Must be enclosed with backticks.
 
 #### Title 'T' (header only)
 
-T`[title]`
+``T`[title]` ``
 
 Title must be enclosed with backticks.
 
 #### Transcription 'Z'
 
-Z`[Transcription]`
+``Z`[Transcription]`
 
 Must be enclosed with backticks.
 
 ### 2.3 Modifiers
 
-Available modifiers:
+**NOTE: Octave modifiers removed as of 16/10 2023 (octave change in body changes octave). Currently, no modifiers are available.**
+~~Available modifiers:~~
 
-| + | Increases current octave by one |
-| - | Decreases current octave by one |
+| Modifier | Description |
+| ----- | ----------- |
+| + | ~~Increases current octave by one~~ |
+| - | ~~Decreases current octave by one~~ |
 
 ### Barlines, repeats and endigs
 
-^(!(?!(?:!|!!)).*!)*(:)*(\.)?([\|]*[\]]?)?(\/)?([\[]?[\|]?)?(:)*([1-9,-]*)?
+^(!(?!(?:!|!!)).*!)*(?:([|\.\|\[:\\]{1,10}[0-9-,]*)$|([\[\]|:\.\\]*))$
+~~^(!(?!(?:!|!!)).*!)*(:)*(\.)?([\|]*[\]]?)?(\\)?([\[]?[\|]?)?(:)*([1-9,-]*)?~~
 
 @todo Add support for line break using barline
 
-| !fermata! | Decorations |
-| : | Repeat end |
-| . | Dotted barline |
-| |] | Barline type (end of bar) |
-| / | Line break |
-| [| | Barline type (start of next bar) |
-| : | Repeat start |
-| ] | Used with hidden barline |
-| 1,2-3 | Ending number(s) |
+Single barlines are not required as they are automatically added.
+
+| Token | Description |
+| ----- | ----------- |
+| `!fermata!` | Decorations |
+| `:` | Repeat end |
+| `.` | Dotted barline |
+| `|]` | Barline type (end of bar) |
+| `\\` | Line break |
+| `[|` | Barline type (start of next bar) |
+| `:` | Repeat start |
+| `]` | Used with hidden barline |
+| `1,2-3` | Ending number(s) |
 
 #### Barline types
 
-| Single barline
-|| Double barline (light-light)
-|] light-heavy
-[| heavy-light
-.| dotted barline
-[|] hidden barline
+| Token | Description |
+| ----- | ----------- |
+| `|` | Single barline |
+| `||` | Double barline (light-light) |
+| `|]` | light-heavy |
+| `[|` | heavy-light |
+| `.|` | dotted barline |
+| `[|]` | hidden barline |
 
 #### Repeats and endings
 
-:| Repeat end with light-heavy barline, :|] not required
-|: Start repeat with heavy-light barline, [|: not required
-:: Repeat end and start, light-heavy-light barline, :|: or other variants not required
-[1 First ending
-[2-3 Second and third ending
-[1,3 First and third ending
-:|[2 Second ending
+| Token | Description |
+| ----- | ----------- |
+| `:|` | Repeat end with light-heavy barline, :|] not required |
+| `|:` | Start repeat with heavy-light barline, [|: not required |
+| `::` | Repeat end and start, light-heavy-light barline, :|: or other variants not  |required
+| `[1` | First ending |
+| `[2-3` | Second and third ending |
+| `[1,3` | First and third ending |
+| `:|[2` | Second ending |
 
 #### Line break
 
-/ Line break, single barline
-||/ Double barline, then line break
-/|: Single barline, then line break and start repeat
-:|/[2 Repeat end, then line break and second ending
+| Token | Description |
+| ----- | ----------- |
+| `\` | Line break, single barline (alternative syntax: \| ) |
+| `||\` | Double barline, then line break |
+| `\|:` | Single barline, then line break and start repeat |
+| `:|\[2` | Repeat end, then line break and second ending |
 
 ### Body
 
-| ( | Slur start |
-| 3:2:4: | Duplets, triplets etc. |
-| !f!!fermata! | Decorations |
-| `IVm6` | Step (analysis) |
-| "Cmaj7/E" | Chord symbol |
-| 'Hel-' | Lyrics |
-| ´Do´ | Solmization |
-| *D64* | Function (analysis) |
-| [ | *Start of group* |
-| +- | Octave shift |
-| bb|b|#|x|m | Accidental |
-| 1-7rxy | Note number or rest |
-| ] | *End of group* |
-| \_\_|[ldwhqestuv_] | Length |
-| . | Dot(s) |
-| > | Tie |
-| ) | Slur end |
+| Token | Description |
+| ----- | ----------- |
+| `(` | Slur start |
+| `3:2:4:` | Duplets, triplets etc. |
+| `!f!!fermata!` | Decorations |
+| ``IVm6`` | Step (analysis) |
+| `"Cmaj7/E"` | Chord symbol |
+| `'Hel-'` | Lyrics |
+| `´Do´` | Solmization |
+| `*D64*` | Function (analysis) |
+| `[` | *Start of group* |
+| `+-/` | Octave shift |
+| `bb|b|#|x|m` | Accidental |
+| `1-9rxyi` | Note number or rest/non-pitched/spacer/invicible |
+| `IL` | Note property: locked |
+| `]` | *End of group* |
+| `\_\_|[ldwhqestuv_]` | Length |
+| `. | Dot(s) |
+| `=` | Tie |
+| `)` | Slur end |
 
 #### Slur (start/end)
 
@@ -350,14 +389,16 @@ A '(' indicates start of a slur and ')' the end of a slur. Slurs may start and s
 
 Triplet definition must always end with a colon. Format p:q:r: , where "put p notes into the time of q for the next r notes". Defaults for q and r are as follows:
 
-| 2: | 2 notes in the time of 3 |
-| 3: | 3 notes in the time of 2 |
-| 4: | 4 notes in the time of 3 |
-| 5: | 5 notes in the time of n |
-| 6: | 6 notes in the time of 2 |
-| 7: | 7 notes in the time of n |
-| 8: | 8 notes in the time of 3 |
-| 9: | 9 notes in the time of n |
+| Token | Description |
+| ----- | ----------- |
+| `2:` | 2 notes in the time of 3 |
+| `3:` | 3 notes in the time of 2 |
+| `4:` | 4 notes in the time of 3 |
+| `5:` | 5 notes in the time of n |
+| `6:` | 6 notes in the time of 2 |
+| `7:` | 7 notes in the time of n |
+| `8:` | 8 notes in the time of 3 |
+| `9:` | 9 notes in the time of n |
 
 If the time signature is compound (6/8, 9/8, 12/8) then n is three, otherwise n is two.
 
@@ -380,6 +421,8 @@ Step (analysis) are enclosed within back ticks.
 Chord symbols are enclosed within double quotation marks.
 
 @todo Specify syntax, like use of parenthetis...
+@todo Allow different levels (lines)
+@todo Check if offset chordsymbols are supported
 
 #### Lyrics
 
@@ -399,13 +442,35 @@ Function analysis are enclosed between asterixes.
 
 #### Octave shift
 
-Single notes may be prefixed with + or - to increase or decrease current octave. These are per note only (see **Modifiers**)
+A + or - is used to change the current octave.
+
+~~Single notes may be prefixed with + or - to increase or decrease current octave. These are per note only (see **Modifiers**) *NOTE: as of 17/10 2023 octave shifts changes tune octave, not for single note.*~~
+
+A single note can be octave shifted down with /. Digits 8 and 9 can be used to avoid shifting octave up for 1 (8) and 2 (9).
 
 #### Accidental
 
-Accidentals are for the note number, not written accidentals. They depend on the currect **input scale** being used. If input scale is minor (and therefore 3 is translated to b3), use m3 to use "3 as in major".
+Accidentals are for the *note number, not written accidentals*. They depend on the currect **input scale** being used. If input scale is minor (and therefore 3 is translated to b3), use m3 to use "3 as in major".
 
-**CHANGE** *Make all scaleNumbers relate to major, requiring minor to use b3, b6 and b7. It would be more consistent, and would also remove the need for the strange 'm' accidental.*
+**CHANGE PROPOSSL** *Make all scaleNumbers relate to major, requiring minor to use b3, b6 and b7. It would be more consistent, and would also remove the need for the strange 'm' accidental. REPLY: No, writing minor without b3/b6/b7 is really convenient.*
+
+#### Note number or rest
+
+Note numbers are from 1-9, where 8 and 9 can be used to avoid changeing octave (for example, 5897 instead of 5+12-7). For rest, use r.
+
+Unpitched rhythms can be written with x instead of 1-9, like x_xx.
+
+TODO: document spacer 'y'.
+
+Use 'i' to create an invisible note. Useful when making theory exercises for hiding single notes. If an 'i' is used in a chord (like [135i]), all notes will be marked as invisible. Also, see "Note properties" 'I'.
+
+#### Note properties
+
+`IL`
+
+Use 'I' to mark note as invicible (useful if hiding an answer in an exercise)
+
+Use 'L' to mark note as locked (editors can use this to disable editing of specific notes)
 
 #### Note groups
 
@@ -414,6 +479,8 @@ Accidentals are for the note number, not written accidentals. They depend on the
 See also: Duplets, triplets etc.
 
 ## 3. Complete RegExp
+
+*Code below might be outdated, was previously used for referece.*
 
 ### Information regexp
 
@@ -428,6 +495,8 @@ See also: Duplets, triplets etc.
 ````
 
 ### Modifiers
+
+@todo document
 
 ### Body regexp
 
@@ -476,7 +545,8 @@ Changes
 Changes
 
 - rest removed (), ([r])\*
-- tie changed to > from - (clashed with octave change -)
+- tie changed from > to = ()
+  - and before that to > from - (clashed with octave change -)
 
 ```regexp
   ([\.]\*)
