@@ -337,13 +337,13 @@ Single barlines are not required as they are automatically added.
 
 | Token | Description |
 | ----- | ----------- |
-| `:|` | Repeat end with light-heavy barline, :|] not required |
-| `|:` | Start repeat with heavy-light barline, [|: not required |
-| `::` | Repeat end and start, light-heavy-light barline, :|: or other variants not  |required
+| `:|` | Repeat end with light-heavy barline, `:|]` not required |
+| `|:` | Start repeat with heavy-light barline, `[|:` not required |
+| `::` | Repeat end and start, light-heavy-light barline, `:|:` or other variants not required |
 | `[1` | First ending |
 | `[2-3` | Second and third ending |
 | `[1,3` | First and third ending |
-| `:|[2` | Second ending |
+| `:|[2` | Second ending with repeat of first ending |
 
 #### Line break
 
