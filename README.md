@@ -1,6 +1,6 @@
 # MusicString
 
-Single line music notation syntax. See *musicstring.md* for syntax definition*.
+Single line music notation syntax. See *musicstring.md* for syntax definition.
 
 Project was started by Marcus Gustafsson in 2019. It is a formalization and extension based on a system that he has used and developed since 2011, for quick notation of melodies on-the-go and for his music theory teaching.
 
